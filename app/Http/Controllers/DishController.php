@@ -7,5 +7,5 @@ use App\Dish;
 class DishController extends CrudController
 {
     protected $model = Dish::class;
-    protected $fields = ['title'];
+    protected $fields = ['title', 'description', 'url', 'last_used', 'season'];
 }

@@ -32,6 +32,10 @@ Route::group(['middleware' => ['catchExceptions', 'api']], function() {
             Route::put('/{id}', 'MealController@update');
             Route::delete('/{id}', 'MealController@delete');
         });
+        Route::prefix('mealPlans')->group(function () {
+            Route::get('/{week}', 'MealPlanController@get');
+            Route::post('/', 'MealPlanController@create');
+        });
         Route::prefix('dishes')->group(function () {
             Route::get('/', 'DishController@all');
             Route::post('/', 'DishController@create');

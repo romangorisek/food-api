@@ -54,6 +54,9 @@ class CrudController extends Controller {
                 "msg" => "Item deleted"
             ];
         }
-        return ["Item could not be deleted"];
+        return [
+            "success" => false,
+            "msg" => "Item could not be deleted"
+        ];
     }
 }
