@@ -34,7 +34,9 @@ Route::group(['middleware' => ['catchExceptions', 'api']], function() {
         });
         Route::prefix('mealPlans')->group(function () {
             Route::get('/{week}', 'MealPlanController@get');
+            Route::get('/', 'MealPlanController@random');
             Route::post('/', 'MealPlanController@create');
+            Route::delete('/', 'MealPlanController@delete');
         });
         Route::prefix('dishes')->group(function () {
             Route::get('/', 'DishController@all');
@@ -42,6 +44,13 @@ Route::group(['middleware' => ['catchExceptions', 'api']], function() {
             Route::get('/{id}', 'DishController@get');
             Route::put('/{id}', 'DishController@update');
             Route::delete('/{id}', 'DishController@delete');
+        });
+        Route::prefix('ingredients')->group(function () {
+            Route::get('/', 'IngredientController@all');
+            Route::post('/', 'IngredientController@create');
+            Route::get('/{id}', 'IngredientController@get');
+            Route::put('/{id}', 'IngredientController@update');
+            Route::delete('/{id}', 'IngredientController@delete');
         });
     });        
 });

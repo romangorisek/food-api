@@ -4,5 +4,5 @@ namespace App;
 
 class Meal extends Model
 {
-    protected static $tableName = 'meals';
+    protected $table = 'meals';
 }

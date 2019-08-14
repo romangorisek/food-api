@@ -2,29 +2,39 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\DB;
+
 class MealPlan extends Model
 {
-    protected static $tableName = 'meal_plans';
+    protected $table = 'meal_plans';
 
     public function week($week, $mealId)
     {
         $mealPlan = $this->cachedMealPlan($week, $mealId);
-        if (!$mealPlan) {
+        $cached = true;
+        if ($mealPlan->isEmpty()) {
             $mealPlan = $this->mealPlanPropositon();
+            $cached = false;
         }
-        return $mealPlan;
+        return ["dishes" => $mealPlan, "cached" => $cached];
     }
 
     private function cachedMealPlan($week, $mealId)
     {
-        $thisWeeksDishIds = $this->where('week', $week)->where('meal_id', $mealId)->orderBy('created_at')->pluck('dish_id')->toArray();
-        return Dish::whereIn('id', $thisWeeksDishIds)->get();
+        // $thisWeeksDishIds = $this->where('week', $week)->where('meal_id', $mealId)->orderBy('day_of_week')->pluck('dish_id')->toArray();
+        // return Dish::whereIn('id', $thisWeeksDishIds)->get();
+
+        return DB::table('meal_plans as MP')
+                    ->join('dishes as D', 'MP.dish_id', '=', 'D.id')
+                    ->select('D.*')
+                    ->where('MP.week', $week)
+                    ->where('MP.meal_id', $mealId)
+                    ->orderBy('MP.day_of_week')
+                    ->get();
     }
 
     private function mealPlanPropositon()
     {
-        $monToSat = Dish::orderBy('last_used')->take(6)->get();
-        $sun = Dish::where('id', 'nedeljsko')->get();
-        return $monToSat->merge($sun);
+        return Dish::inRandomOrder()->take(7)->get();
     }
 }

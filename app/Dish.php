@@ -4,7 +4,10 @@ namespace App;
 
 class Dish extends Model
 {
-    protected static $tableName = 'dishes';
+    protected $table = 'dishes';
 
-
+    public function ingredients()
+    {
+        return $this->belongsToMany('App\Ingredient');
+    }
 }
